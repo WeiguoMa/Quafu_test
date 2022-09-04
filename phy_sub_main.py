@@ -58,6 +58,8 @@ circuit.h(0)
 circuit.swap(1, 2)
 circuit.cp(-np.pi/2, 1, 0)
 circuit.h(1)
+circuit.p()
+circuit.z()
 
 circuit.draw('mpl', filename='D:\\Python_project\\target.png')
 #%%
