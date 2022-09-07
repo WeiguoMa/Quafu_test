@@ -30,20 +30,26 @@ def cpt(prog, qlist, params):
     return prog
 
 
+
+"""
+circuit.h(0)
+circuit.cp(-np.pi/2, 1, 0)
+circuit.swap(1, 2)
+circuit.cp(-np.pi/4, 1, 0)
+circuit.h(2)
+circuit.cp(-np.pi/2, 1, 2)
+circuit.h(1)
+"""
+
+
 def iqft(prog, qlist):
-    prog.swap(qlist[0], qlist[1])
-    prog.swap(qlist[1], qlist[2])
-    prog.h(qlist[1])
-    prog = cpt(prog, [qlist[0], qlist[1]], -np.pi/2)
-    # circuit.cp(-np.pi/2, 0, 1)
-    prog = cpt(prog, [qlist[2], qlist[1]], -np.pi/4)
-    # circuit.cp(-np.pi/4, 2, 1)
     prog.h(qlist[0])
-    prog.swap(qlist[1], qlist[2])
     prog = cpt(prog, [qlist[1], qlist[0]], -np.pi/2)
-    # circuit.cp(-np.pi/2, 1, 0)
+    prog.swap(qlist[1], qlist[2])
+    prog = cpt(prog, [qlist[1], qlist[0]], -np.pi/4)
+    prog.h(qlist[2])
+    prog = cpt(prog, [qlist[1], qlist[2]], -np.pi/2)
     prog.h(qlist[1])
-    prog.barrier()
     return prog
 
 simulator = QasmSimulator()
@@ -69,8 +75,6 @@ circuit = optim_tof(circuit, [2, 4, 3])
 circuit.cnot(3, 4)
 circuit.barrier()
 
-# circuit.draw()
-
 #%%
 circuit.swap(0, 1)
 circuit.swap(1, 2)
@@ -86,25 +90,11 @@ circuit.swap(3, 4)
 circuit = optim_tof(circuit, [2, 4, 3])
 circuit.cnot(3, 4)
 circuit.barrier()
-# circuit.draw()
 
 #%%
 
-# circuit.swap(0, 1)
-# circuit.swap(1, 2)
-# circuit.h(1)
-# circuit = cpt(circuit, [0, 1], -np.pi/2)
-# # circuit.cp(-np.pi/2, 0, 1)
-# circuit = cpt(circuit, [2, 1], -np.pi/4)
-# # circuit.cp(-np.pi/4, 2, 1)
-# circuit.h(0)
-# circuit.swap(1, 2)
-# circuit = cpt(circuit, [1, 0], -np.pi/2)
-# # circuit.cp(-np.pi/2, 1, 0)
-# circuit.h(1)
-# circuit.barrier()
 # circuit = iqft(circuit, [0, 1, 2])
-circuit.measure([0, 1, 2], [1, 0, 2])
+circuit.measure([0, 1, 2], [2, 0, 1])
 circuit.draw('mpl', filename='D:\\Python_project\\target.png')
 
 #%%
@@ -117,20 +107,4 @@ counts = results.get_counts()
 print('result: {}'.format(counts))
 plot_histogram(counts)
 
-#%%
-# IBMQ.save_account('0639082da4ca91f28f79d93bbc1ec3ed5adcc32299523f942270326ac03c65bb8d51ddce542ec869ef7154dca84ef682606220c84d4e9b8243a81927881c8bfa',
-#                   overwrite=True)
-#
-# IBMQ.load_account()
-# provider = IBMQ.get_provider(group='open', project='main')
-# qcomp = provider.get_backend('ibmq_manila')
-#
-#
-# job = execute(circuit, backend=qcomp, shots=8196)
-#
-# job_monitor(job)
-#
-# result = job.result()
-# plot_histogram(result.get_counts(circuit))
 
-#%%

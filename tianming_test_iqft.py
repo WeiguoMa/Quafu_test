@@ -58,7 +58,7 @@ circuit.h(2)
 circuit.cp(-np.pi/2, 1, 2)
 circuit.h(1)
 
-circuit.draw('mpl', filename='D:\\Python_project\\target.png')
+circuit.draw('mpl')
 #%%
 
 circuit.measure([0, 1, 2], [2, 0, 1])
