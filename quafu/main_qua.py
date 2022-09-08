@@ -2,7 +2,7 @@
 
 from quafu import *
 import numpy as np
-
+from quafu import simulate
 
 
 def initialize_q(prog):
